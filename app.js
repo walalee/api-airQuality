@@ -8,15 +8,15 @@ const LAT = 13.87;  // ละติจูด (กรุงเทพฯ)
 const LON = 100.6; 
 const BASE_URL = `https://api.weatherapi.com/v1/history.json`;
 
-// เชื่อมต่อ MongoDB
-mongoose.connect('mongodb://localhost:27017/weatherDB', {
+mongoose.connect('mongodb+srv://walaleemauenjit:cpe495air@cluster0.puumjnp.mongodb.net/weatherDB', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
-    console.log('เชื่อมต่อ MongoDB สำเร็จ!');
+    console.log('เชื่อมต่อ MongoDB Atlas สำเร็จ!');
 }).catch((error) => {
     console.error('ไม่สามารถเชื่อมต่อ MongoDB:', error);
 });
+
 
 // ฟังก์ชันดึงข้อมูลและบันทึกลง MongoDB
 async function getWeatherAndSave() {
