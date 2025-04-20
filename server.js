@@ -3,24 +3,23 @@ const express = require('express');
 const mongoose = require('mongoose');
 const http = require('http');
 const cors = require('cors');
+const mqtt = require('mqtt');
 const { Server } = require('socket.io');
-const SensorData = require('./db');
+const SensorData = require('./db'); // ต้องมีโมเดล SensorData
 
 const app = express();
 app.use(cors());
 
 const server = http.createServer(app);
-
 const io = new Server(server, {
   cors: { origin: '*' }
 });
 
-// ตรวจสอบ MONGO_URI
+// ตรวจสอบ ENV
 const MONGO_URI = process.env.MONGO_URI;
-if (!MONGO_URI) {
-  console.error('❌ Missing MONGO_URI in environment variables');
-  process.exit(1);
-}
+const MQTT_BROKER = process.env.MQTT_BROKER || 'mqtt://broker.emqx.io:1883';
+const MQTT_TOPIC = process.env.MQTT_TOPIC || 'sensor/data';
+const PORT = process.env.PORT || 5084;
 
 // เชื่อม MongoDB
 mongoose.connect(MONGO_URI)
@@ -30,9 +29,39 @@ mongoose.connect(MONGO_URI)
     process.exit(1);
   });
 
+// เชื่อม MQTT
+const mqttClient = mqtt.connect(MQTT_BROKER);
+
+mqttClient.on('connect', () => {
+  console.log(`✅ MQTT connected to ${MQTT_BROKER}`);
+  mqttClient.subscribe(MQTT_TOPIC, (err) => {
+    if (!err) console.log(`📡 Subscribed to topic: ${MQTT_TOPIC}`);
+    else console.error('❌ MQTT subscribe error:', err);
+  });
+});
+
+// รับ message จาก MQTT แล้วบันทึกลง MongoDB + ส่งต่อไป WebSocket
+mqttClient.on('message', async (topic, message) => {
+    try {
+      const data = JSON.parse(message.toString());
+  
+      console.log('📦 ได้รับข้อมูลจาก MQTT:', data);
+  
+      const newData = new SensorData(data);
+      await newData.save();
+  
+      console.log('💾 บันทึกข้อมูลลง MongoDB สำเร็จ');
+  
+      io.emit('newSensorData', newData);
+    } catch (err) {
+      console.error('❌ เกิดข้อผิดพลาดตอนจัดการข้อความ MQTT:', err.message);
+    }
+  });
+  
+
 // WebSocket communication
 io.on('connection', (socket) => {
-  console.log('🟢 New client connected');
+  console.log('🟢 WebSocket client connected');
 
   socket.on('sendSensorData', async (data) => {
     try {
@@ -41,16 +70,15 @@ io.on('connection', (socket) => {
       io.emit('newSensorData', newData);
     } catch (err) {
       console.error('❌ Error saving sensor data:', err);
-      socket.emit('errorSavingData', { message: 'Invalid data format or database error' });
+      socket.emit('errorSavingData', { message: 'Invalid data format or DB error' });
     }
   });
 
   socket.on('disconnect', () => {
-    console.log('🔴 Client disconnected');
+    console.log('🔴 WebSocket client disconnected');
   });
 });
 
-// API ดึงข้อมูลล่าสุด
 app.get('/latest', async (req, res) => {
   try {
     const latest = await SensorData.find().sort({ timestamp: -1 }).limit(1);
@@ -65,7 +93,6 @@ app.get('/latest', async (req, res) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 5084;
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
