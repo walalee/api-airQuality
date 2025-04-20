@@ -1,14 +1,16 @@
-// backend/db.js
 const mongoose = require('mongoose');
 
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log('MongoDB connected');
-  } catch (err) {
-    console.error(err.message);
-    process.exit(1);
-  }
-};
+const SensorDataSchema = new mongoose.Schema({
+  TempC: { type: Number, required: true },
+  Hum: { type: Number, required: true },
+  Windspeed: { type: Number, required: true },
+  pm2_5: { type: Number, required: true },
+  pm10: { type: Number, required: true },
+  co: { type: Number, required: true },
+  no2: { type: Number, required: true },
+  so2: { type: Number, required: true },
+  o3: { type: Number, required: true },
+  timestamp: { type: Date, default: Date.now }
+}, { strict: true });
 
-module.exports = connectDB;
+module.exports = mongoose.model('SensorData', SensorDataSchema);
