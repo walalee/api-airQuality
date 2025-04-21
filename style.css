@@ -1,0 +1,183 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+    background-image: url('assets/3.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .weather-container {
+    display: flex;
+    width: 80%;
+    max-width: 900px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .pollution-light {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+    justify-content: center;
+  }
+  
+  .sidebar {
+    background: #ffffff;
+    color: black;
+    border-top-right-radius: 25px; /* ขอบขวาบน */
+    border-bottom-right-radius: 25px; /* ขอบขวาล่าง */
+    text-align: center;
+    flex: 1;
+    width: 10%;
+    min-width: 200px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .content {
+    flex: 2;
+    padding: 60px;
+  }
+  
+  .tabs {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+  
+  .tabs span {
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  
+  .tabs .active {
+    background: #a7c8ee;
+    color: white;
+  }
+  
+  /* Forecast Section */
+  .forecast {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    border-radius: 20px;
+  }
+  
+  .forecast-card {
+    background: #ffffff; /* เปลี่ยนเป็นสีขาว */
+    padding: 5px; /* ลดการเว้นระยะภายใน */
+    border-radius: 10px;
+    text-align: center;
+    width: 60px; /* ปรับขนาดให้เล็กลง */
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* เพิ่มเงา */
+  }
+  
+  .forecast-card p {
+    margin: 2px 0;  /* ลดระยะห่างระหว่างวันและอุณหภูมิ */
+    padding: 0; /* ปรับการเว้นระยะจากข้อความ */
+    font-size: 14px; /* ปรับขนาดฟอนต์ให้เล็กลง */
+  }
+  
+  .forecast-card div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* จัดตำแหน่งให้อยู่กลาง */
+  }
+  
+  .forecast-card div p {
+    margin-bottom: 3px;  /* ลดระยะห่างระหว่างวันและอิโมจิ */
+  }
+  
+  .forecast-card div > div {
+    margin-bottom: 3px; /* ลดระยะห่างระหว่างอิโมจิและอุณหภูมิ */
+  }
+  
+  .forecast-card div > div:last-child {
+    margin-bottom: 0;  /* ไม่มีระยะห่างหลังสุด */
+  }
+  
+  .forecast-card div .pollution-status {
+    margin-top: 3px; /* เพิ่มระยะห่างระหว่างอุณหภูมิและสถานะมลพิษ */
+  }
+  
+  .forecast-card:hover {
+    background: #f9f9f9; /* สี hover อ่อนลง */
+  }
+  
+  .forecast-card.active {
+    background: #ff9800;
+    color: white;
+    font-weight: bold;
+    transform: scale(1.1);
+    transition: 0.3s ease;
+  }
+  
+  /* Highlights Section */
+  .highlights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .highlight-card {
+    background: #ffffff; /* เปลี่ยนเป็นสีขาว */
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* เพิ่มเงา */
+    transition: transform 0.5s ease;
+  }
+  
+  .highlight-card:hover {
+    transform: translateY(-3px);
+    background: #f9f9f9; /* สี hover อ่อนลง */
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .weather-info {
+        position: relative;
+        margin-top: 60px;
+        margin-left: 15px;
+    }
+  
+    .weather-container {
+        flex-direction: column;
+        width: 95%;
+    }
+  
+    .forecast {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+  
+    .forecast-card {
+        width: 60px;
+        margin: 5px;
+    }
+  
+    .highlights {
+        grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  #temperature {
+    font-size: 50px;
+  }
+  
