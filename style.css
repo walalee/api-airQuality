@@ -148,6 +148,7 @@ body {
     transform: translateY(-3px);
     background: #f9f9f9; /* สี hover อ่อนลง */
   }
+
   
   /* Responsive Design */
   @media (max-width: 600px) {
@@ -179,5 +180,43 @@ body {
   
   #temperature {
     font-size: 50px;
+  }
+  
+  .highlights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
+    padding: 0 20px;
+  }
+  
+  .highlight-card {
+    background: #ffffff;
+    padding: 20px 10px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 120px;
+  }
+  
+  .highlight-card:hover {
+    transform: translateY(-3px);
+    background: #f9f9f9;
+  }
+  
+  .highlight-card h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .highlight-card p {
+    margin: 8px 0 0;
+    font-size: 24px;
+    color: #ff5722;
   }
   
