@@ -1,4 +1,4 @@
-const socket = io("http://localhost:5084"); // หรือใช้ IP ถ้าอยู่คนละเครื่อง
+const socket = io("ws://localhost:5084"); // หรือใช้ IP ถ้าอยู่คนละเครื่อง
 
 // เมื่อเชื่อมต่อกับ WebSocket สำเร็จ
 socket.on("connect", () => {
@@ -30,7 +30,7 @@ function updateSensorUI(data) {
     document.getElementById("windSpeed").textContent = Windspeed ?? "--";
     document.getElementById("pm2.5").textContent = pm2_5 ?? "--";
     document.getElementById("pm10").textContent = pm10 ?? "--";
-    document.getElementById("pm1.0").textContent = pm1_0 ?? "--";
+    // document.getElementById("pm1_0").textContent = pm1_0 ?? "--";
     document.getElementById("CO").textContent = CO ?? "--";
     document.getElementById("O3").textContent = O3 ?? "--";
     document.getElementById("NO2").textContent = NO2 ?? "--";
@@ -45,7 +45,7 @@ function updateSensorUI(data) {
 }
 
 // ดึงข้อมูลล่าสุดจาก API ตอนเปิดหน้า
-fetch("http://localhost:5084/latest")
+fetch("ws://localhost:5084/latest")
     .then((res) => res.json())
     .then((data) => {
         console.log("📦 โหลดข้อมูลล่าสุดจาก API สำเร็จ");
@@ -170,7 +170,7 @@ function updateHighlights(highlights) {
     updateTime();
 
     // เชื่อมต่อกับ WebSocket
-    const socket = io("http://localhost:5084");
+    const socket = io("ws://localhost:5084");
 
     // เมื่อได้รับข้อมูลจาก server
     socket.on("weather", function (data) {
