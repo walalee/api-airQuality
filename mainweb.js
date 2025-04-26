@@ -25,9 +25,9 @@ function updateSensorUI(data) {
     console.log("⏰ Timestamp:", new Date(timestamp));
 
     // อัปเดต UI
-    document.getElementById("temperature").textContent = `${TempC ?? "--"}°`;
-    document.getElementById("humidity").textContent = Hum ?? "--";
-    document.getElementById("windSpeed").textContent = Windspeed ?? "--";
+    // document.getElementById("temperature").textContent = `${TempC ?? "--"}°`;
+    // document.getElementById("humidity").textContent = Hum ?? "--";
+    // document.getElementById("windSpeed").textContent = Windspeed ?? "--";
     document.getElementById("pm2.5").textContent = pm2_5 ?? "--";
     document.getElementById("pm10").textContent = pm10 ?? "--";
     // document.getElementById("pm1_0").textContent = pm1_0 ?? "--";
@@ -36,12 +36,6 @@ function updateSensorUI(data) {
     document.getElementById("NO2").textContent = NO2 ?? "--";
     document.getElementById("SO2").textContent = SO2 ?? "--";
 
-    // เวลา (โชว์เวลาปัจจุบัน)
-    const now = new Date();
-    document.getElementById("time").textContent = now.toLocaleString("th-TH", {
-        dateStyle: "medium",
-        timeStyle: "short",
-    });
 }
 
 // ดึงข้อมูลล่าสุดจาก API ตอนเปิดหน้า
