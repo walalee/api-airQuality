@@ -5,11 +5,16 @@ const http = require('http');
 const cors = require('cors');
 const mqtt = require('mqtt');
 const { Server } = require('socket.io');
-const SensorData = require('./db'); // ต้องมีโมเดล SensorData
+const path = require('path'); // เพิ่มเข้ามา
+const SensorData = require('./db');
 
 const app = express();
 app.use(cors());
 
+// Serve frontend static files
+app.use(express.static(__dirname));
+
+// สร้าง server สำหรับ socket.io
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: { origin: '*' }
@@ -78,9 +83,9 @@ io.on('connection', (socket) => {
   });
 });
 
-// Route: หน้าหลัก
+// Route: เสิร์ฟ index.html
 app.get('/', (req, res) => {
-  res.send('🚀 Welcome to the Air Quality API Server!');
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Route: ดึงข้อมูลล่าสุด
