@@ -42,22 +42,21 @@ mqttClient.on('connect', () => {
 
 // รับ message จาก MQTT แล้วบันทึกลง MongoDB + ส่งต่อไป WebSocket
 mqttClient.on('message', async (topic, message) => {
-    try {
-      const data = JSON.parse(message.toString());
-  
-      console.log('📦 ได้รับข้อมูลจาก MQTT:', data);
-  
-      const newData = new SensorData(data);
-      await newData.save();
-  
-      console.log('💾 บันทึกข้อมูลลง MongoDB สำเร็จ');
-  
-      io.emit('newSensorData', newData);
-    } catch (err) {
-      console.error('❌ เกิดข้อผิดพลาดตอนจัดการข้อความ MQTT:', err.message);
-    }
-  });
-  
+  try {
+    const data = JSON.parse(message.toString());
+
+    console.log('📦 ได้รับข้อมูลจาก MQTT:', data);
+
+    const newData = new SensorData(data);
+    await newData.save();
+
+    console.log('💾 บันทึกข้อมูลลง MongoDB สำเร็จ');
+
+    io.emit('newSensorData', newData);
+  } catch (err) {
+    console.error('❌ เกิดข้อผิดพลาดตอนจัดการข้อความ MQTT:', err.message);
+  }
+});
 
 // WebSocket communication
 io.on('connection', (socket) => {
@@ -79,6 +78,12 @@ io.on('connection', (socket) => {
   });
 });
 
+// Route: หน้าหลัก
+app.get('/', (req, res) => {
+  res.send('🚀 Welcome to the Air Quality API Server!');
+});
+
+// Route: ดึงข้อมูลล่าสุด
 app.get('/latest', async (req, res) => {
   try {
     const latest = await SensorData.find().sort({ timestamp: -1 }).limit(1);
@@ -88,6 +93,17 @@ app.get('/latest', async (req, res) => {
     res.json(latest[0]);
   } catch (err) {
     console.error('❌ Error in /latest API:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Route: ดึงข้อมูลทั้งหมด
+app.get('/api/sensors', async (req, res) => {
+  try {
+    const allData = await SensorData.find().sort({ timestamp: -1 });
+    res.json(allData);
+  } catch (err) {
+    console.error('❌ Error in /api/sensors API:', err);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
