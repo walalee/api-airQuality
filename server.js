@@ -113,24 +113,6 @@ app.get('/api/sensors', async (req, res) => {
   }
 });
 
-// Route: พยากรณ์ AQI สำหรับวันพรุ่งนี้ (เพิ่มมาใหม่)
-app.get('/api/predicted-aqi-tomorrow', (req, res) => {
-  const predictedAQI = {
-    day: 'Tomorrow',
-    pm2_5: Math.floor(Math.random() * 100),
-    pm10: Math.floor(Math.random() * 100),
-    O3: (Math.random() * 100).toFixed(2),
-    CO: (Math.random() * 10).toFixed(2),
-    NO2: (Math.random() * 100).toFixed(2),
-    SO2: (Math.random() * 100).toFixed(2),
-    temperature: (25 + Math.random() * 10).toFixed(1),
-    humidity: Math.floor(30 + Math.random() * 70),
-    windSpeed: Math.floor(Math.random() * 20)
-  };
-
-  res.json(predictedAQI);
-});
-
 // Start server
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
