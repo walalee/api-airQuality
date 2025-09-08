@@ -1,7 +1,7 @@
 require('dotenv').config(); // โหลด .env
 const axios = require('axios');
 const mongoose = require('mongoose');
-const Weather = require('./weather');  // นำเข้า Model
+const Weather = require('../backend/weather');  // นำเข้า Model
 
 // โหลดค่าจาก .env
 const API_KEY = process.env.WEATHER_API_KEY || 'da1e7bcbba7a4957bd863032250104';
